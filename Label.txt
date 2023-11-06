@@ -1,0 +1,50 @@
+import pandas as pd
+import shutil
+import os
+
+df = pd.read_excel('/content/drive/MyDrive/HEMMATI/report1v1.xlsx')
+
+PathFinal='/content/drive/MyDrive/HEMMATI/600imageslabel/'
+datasetPath='/content/drive/MyDrive/HEMMATI/600images/'
+
+def TransferAllFiles(listPathFiles,targetPath):
+    for i in range(len(listPathFiles)):
+      if os.path.exists(listPathFiles[i]):
+         print(listPathFiles[i])
+         shutil.move(listPathFiles[i], targetPath)
+
+def resetFolder():
+    if not os.path.exists(PathFinal):
+        os.makedirs(PathFinal+"1")
+        os.makedirs(PathFinal+"2")
+        os.makedirs(PathFinal+"3")
+        os.makedirs(PathFinal+"4444")
+    else:
+        shutil.rmtree(PathFinal)
+        os.makedirs(PathFinal+"1")
+        os.makedirs(PathFinal+"2")
+        os.makedirs(PathFinal+"3")
+        os.makedirs(PathFinal+"4444")
+    print(f'Directory {PathFinal} created')
+
+
+resetFolder()
+
+for index, row in df.iterrows():
+    row_list = [str(field) for field in row]
+    id=row_list[0]
+    ClassRight=row_list[7]
+    ClassLeft=row_list[8]
+    listRight=['_r1', '_r2','_r3','_r4']
+    listLeft=['_l1', '_l2','_l3','_l4']
+
+    for i in range(len(listRight)):
+        listRight[i] = datasetPath+id+listRight[i] +'.jpg'
+        listLeft[i] = datasetPath+id+listLeft[i] +'.jpg'
+
+    targetClassRight=PathFinal+ClassRight
+    targetClassLeft=PathFinal+ClassLeft
+    TransferAllFiles(listRight, targetClassRight)
+    TransferAllFiles(listLeft, targetClassLeft)
+
+
